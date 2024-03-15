@@ -1,12 +1,20 @@
 # yabs.nvim
 
-Fork of [yabs.nvim](https://github.com/pianocomposer321/yabs.nvim): Yet Another Build System for Neovim, written in lua.
+Yet Another Build System for Neovim, written in lua.
 
-yabs.nvim was deprecated since January 2024, I forked it to add features that I needed for my personal use. However feel free to contribute !
+Fork of [yabs.nvim](https://github.com/pianocomposer321/yabs.nvim), as the maintaineur archived the repository.
+
+This inital goal of this fork was to had features that I wanted. However feel free to contribute as well for your liking!
 
 ## About
 
 yabs.nvim adds vscode-like tasks feature to neovim. It allows you to define specific commands that are associated with certain filetypes (or whole projects), as well as where the output for those commands should go, and execute them with a keybinding. For example, for a python file you could have a `run` task that runs `python3 %` in the terminal; for rust you could have a `build` task and a `run` task that executes `cargo build`, sending the output to the quickfix list, and `cargo run`, sending the output to the terminal, respectively; and for javascript, you could have a task to start the frontend server, one to start the backend server, and another one to run tests.
+
+## Roadmap
+
+- [ ] Configuration compatible with Lazy.
+- [ ] Add tags to tasks. Tags are a way to search for tasks, and allow for multiple "build" tasks per language.
+- [ ] Language-related tasks should not need a default_task.
 
 ## Installation
 
@@ -14,7 +22,7 @@ yabs.nvim adds vscode-like tasks feature to neovim. It allows you to define spec
 
 ```lua
 use {
-  'pianocomposer321/yabs.nvim',
+  'Seowlfh/yabs.nvim',
   requires = { 'nvim-lua/plenary.nvim' }
 }
 ```
@@ -23,7 +31,7 @@ use {
 
 ```lua
 Plug 'nvim-lua/plenary.nvim'`
-Plug 'pianocomposer321/yabs.nvim'`
+Plug 'Seowlfh/yabs.nvim'`
 ```
 
 ## Setup
