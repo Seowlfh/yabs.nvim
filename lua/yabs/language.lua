@@ -74,6 +74,12 @@ end
 
 function Language:has_task(task)
   if type(task) == 'string' then
+    for _, t in pairs(self.tasks) do
+      if t.tag == task then
+        return true
+      end
+    end
+
     return self.tasks[task] ~= nil
   end
   -- TODO: remove this, tasks as tables is no longer supported
@@ -84,9 +90,26 @@ function Language:has_task(task)
 end
 
 function Language:run_task(task, opts)
+  -- Find a match with a tag
+  for _, t in pairs(self.tasks) do
+    if t.tag == task then
+      if type(task) == 'string' then
+        vim.schedule(function()
+          t:run(opts)
+        end)
+      elseif type(task) == 'table' then
+        -- TODO: remove this, tasks as tables is no longer supported
+        utils.notify('yabs: tasks as tables are no longer supported', vim.log.levels.ERROR)
+      end
+      return
+    end
+  end
+
   assert(self:has_task(task), 'invalid task ' .. vim.inspect(task) .. ' for language ' .. self.name)
   if type(task) == 'string' then
-    vim.schedule(function() self.tasks[task]:run(opts) end)
+    vim.schedule(function()
+      self.tasks[task]:run(opts)
+    end)
   elseif type(task) == 'table' then
     -- TODO: remove this, tasks as tables is no longer supported
     utils.notify('yabs: tasks as tables are no longer supported', vim.log.levels.ERROR)

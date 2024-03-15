@@ -132,7 +132,16 @@ function Yabs:get_tasks(scope)
 end
 
 function Yabs:run_global_task(task, opts)
-  assert(self.tasks[task], 'yabs: no global task named ' .. task)
+  -- Find a match with a tag
+  for _, t in pairs(self.tasks) do
+    if t.tag == task then
+      t:run(opts)
+      return
+    end
+  end
+
+  assert(self:has_task(task), 'yabs: no global task named ' .. task)
+
   self.tasks[task]:run(opts)
 end
 
@@ -147,6 +156,16 @@ function Yabs:_run_task_with_scope(task, scope, opts)
     current_language:run_task(task, opts)
     return
   end
+end
+
+function Yabs:has_task(task)
+  for _, t in pairs(self.tasks) do
+    if t.tag == task then
+      return true
+    end
+  end
+
+  return self.tasks[task] ~= nil
 end
 
 function Yabs:run_task(task, opts)
@@ -189,7 +208,7 @@ function Yabs:run_task(task, opts)
     self.default_language:run_task(task)
     return
   end
-  if self.tasks and self.tasks[task] then
+  if self.tasks and self:has_task(task) then
     self:run_global_task(task, opts)
     return
   end
