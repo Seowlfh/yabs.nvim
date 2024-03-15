@@ -1,20 +1,8 @@
 # yabs.nvim
 
-Yet Another Build System for Neovim, written in lua.
+Fork of [yabs.nvim](https://github.com/pianocomposer321/yabs.nvim): Yet Another Build System for Neovim, written in lua.
 
-# :warning: Deprecation Notice
-
-As you can probably tell from the fact that the most recent commit was 2 years
-ago (and the fact that unless you are somehow reading this within 30 seconds of
-me pushing this commit, the repository is archived) I am no longer maintaining
-this plugin. If you want to continue using this, go ahead, and if someone else
-wants to fork this and take over maintinance, that would be awesome too.
-Otherwise I can recommend
-[overseer.nvim](https://github.com/stevearc/overseer.nvim) as an alternative.
-I'm currently using overseer.nvim along with my own
-[officer.nvim](https://github.com/pianocomposer321/officer.nvim).
-
-<!-- ![screenshot](./screenshot.png) -->
+yabs.nvim was deprecated since January 2024, I forked it to add features that I needed for my personal use. However feel free to contribute !
 
 ## About
 
