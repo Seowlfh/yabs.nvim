@@ -16,7 +16,7 @@ function Task:new(args)
     output = args.output,
     condition = args.condition,
     disabled = false,
-    tag = args.tag,
+    tag = args.tag or '',
     opts = args.opts or {},
   }
 
