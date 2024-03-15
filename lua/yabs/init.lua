@@ -132,8 +132,20 @@ function Yabs:get_tasks(scope)
 end
 
 function Yabs:run_global_task(task, opts)
-  assert(self.tasks[task], 'yabs: no global task named ' .. task)
-  self.tasks[task]:run(opts)
+  -- Find a match with a tag
+  for _, t in pairs(self.tasks) do
+    if t.tag == task then
+      t:run(opts)
+      return
+    end
+  end
+
+  local curr_task = self:find_task(task)
+  if curr_task == nil then
+    assert(false, 'yabs: no global task named ' .. task)
+  end
+
+  curr_task:run(opts)
 end
 
 function Yabs:_run_task_with_scope(task, scope, opts)
@@ -147,6 +159,26 @@ function Yabs:_run_task_with_scope(task, scope, opts)
     current_language:run_task(task, opts)
     return
   end
+end
+
+function Yabs:find_task(task)
+  for _, t in pairs(self.tasks) do
+    if t.tag == task then
+      return t
+    end
+  end
+
+  return self.tasks[task]
+end
+
+function Yabs:has_task(task)
+  for _, t in pairs(self.tasks) do
+    if t.tag == task then
+      return true
+    end
+  end
+
+  return self.tasks[task] ~= nil
 end
 
 function Yabs:run_task(task, opts)
@@ -189,9 +221,12 @@ function Yabs:run_task(task, opts)
     self.default_language:run_task(task)
     return
   end
-  if self.tasks and self.tasks[task] then
-    self:run_global_task(task, opts)
-    return
+  if self.tasks then
+    local curr_task = self:find_task(task)
+    if curr_task ~= nil then
+      self:run_global_task(curr_task, opts)
+      return
+    end
   end
 
   utils.notify('No task named ' .. task, vim.log.levels.ERROR)

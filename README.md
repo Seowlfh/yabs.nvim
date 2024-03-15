@@ -12,9 +12,15 @@ yabs.nvim adds vscode-like tasks feature to neovim. It allows you to define spec
 
 ## Roadmap
 
+NEW:
 - [ ] Configuration compatible with Lazy.
-- [ ] Add tags to tasks. Tags are a way to search for tasks, and allow for multiple "build" tasks per language.
+- [x] Add tags to tasks. Tags are a way to search for tasks, and allow for multiple "build" tasks per language.
+- [ ] Add support for toggleterm for the "terminal" output
+- [ ] Possibility for a task to exclude other tasks (i.e., exclude other tasks with the same tag)
+
+FIXES:
 - [ ] Language-related tasks should not need a default_task.
+- [ ] Project tasks should not override global tasks
 
 ## Installation
 
