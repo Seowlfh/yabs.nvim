@@ -10,18 +10,6 @@ This inital goal of this fork was to had features that I wanted. However feel fr
 
 yabs.nvim adds vscode-like tasks feature to neovim. It allows you to define specific commands that are associated with certain filetypes (or whole projects), as well as where the output for those commands should go, and execute them with a keybinding. For example, for a python file you could have a `run` task that runs `python3 %` in the terminal; for rust you could have a `build` task and a `run` task that executes `cargo build`, sending the output to the quickfix list, and `cargo run`, sending the output to the terminal, respectively; and for javascript, you could have a task to start the frontend server, one to start the backend server, and another one to run tests.
 
-## Roadmap
-
-NEW:
-- [ ] Configuration compatible with Lazy.
-- [x] Add tags to tasks. Tags are a way to search for tasks, and allow for multiple "build" tasks per language.
-- [ ] Add support for toggleterm for the "terminal" output
-- [ ] Possibility for a task to exclude other tasks (i.e., exclude other tasks with the same tag)
-
-FIXES:
-- [ ] Language-related tasks should not need a default_task.
-- [ ] Project tasks should not override global tasks
-
 ## Installation
 
 [packer.nvim](https://github.com/wbthomason/packer.nvim):
