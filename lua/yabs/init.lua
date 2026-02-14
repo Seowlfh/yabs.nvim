@@ -42,34 +42,34 @@ local function _set_output_type_configs(output_types)
   end
 end
 
-function Yabs:setup(values)
+function Yabs:setup(opts)
   local config = require('yabs.config')
   setmetatable(config, {
-    __index = vim.tbl_extend('force', config.defaults, { opts = values.opts }),
+    __index = vim.tbl_extend('force', config.defaults, { opts = opts.opts }),
   })
-  values = vim.tbl_deep_extend('force', config, values or {})
+  opts = vim.tbl_deep_extend('force', config, opts or {})
 
   _set_output_type_configs(config.opts.output_types)
 
   local outputs = require('yabs.outputs')
-  self.default_output = outputs[values.default_output] or self.default_output or config.output
+  self.default_output = outputs[opts.default_output] or self.default_output or config.output
 
-  self.default_type = values.default_type or self.default_type or config.type
+  self.default_type = opts.default_type or self.default_type or config.type
 
   -- Add all the languages
-  values.languages = values.languages or {}
-  for name, options in pairs(values.languages) do
+  opts.languages = opts.languages or {}
+  for name, options in pairs(opts.languages) do
     self:add_language(name, options)
   end
 
   -- Add tasks
-  local tasks = values.tasks or {}
+  local tasks = opts.tasks or {}
   for name, options in pairs(tasks) do
     self:add_task(name, options)
   end
 
-  if values.default_task then
-    self.default_task = values.default_task
+  if opts.default_task then
+    self.default_task = opts.default_task
   end
 
   did_setup = true
@@ -132,8 +132,13 @@ function Yabs:get_tasks(scope)
 end
 
 function Yabs:run_global_task(task, opts)
-  assert(self.tasks[task], 'yabs: no global task named ' .. task)
-  self.tasks[task]:run(opts)
+  -- Find a match with a tag
+  local curr_task = self:find_task(task)
+  if curr_task == nil then
+    assert(false, 'yabs: no global task named ' .. task)
+  end
+
+  curr_task:run(opts)
 end
 
 function Yabs:_run_task_with_scope(task, scope, opts)
@@ -147,6 +152,27 @@ function Yabs:_run_task_with_scope(task, scope, opts)
     current_language:run_task(task, opts)
     return
   end
+end
+
+function Yabs:find_task(task)
+  -- TODO: Add some way to resolve tag conflicts. Currently, the first task in the table is used
+  for _, t in pairs(self.tasks) do
+    if t.tag == task then
+      return t
+    end
+  end
+
+  return self.tasks[task]
+end
+
+function Yabs:has_task(task)
+  for _, t in pairs(self.tasks) do
+    if t.tag == task then
+      return true
+    end
+  end
+
+  return self.tasks[task] ~= nil
 end
 
 function Yabs:run_task(task, opts)
@@ -189,7 +215,7 @@ function Yabs:run_task(task, opts)
     self.default_language:run_task(task)
     return
   end
-  if self.tasks and self.tasks[task] then
+  if self.tasks then
     self:run_global_task(task, opts)
     return
   end

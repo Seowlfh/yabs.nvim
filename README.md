@@ -2,21 +2,28 @@
 
 Yet Another Build System for Neovim, written in lua.
 
-Fork of [yabs.nvim](https://github.com/pianocomposer321/yabs.nvim), as the maintaineur archived the repository.
+Fork of [yabs.nvim](https://github.com/pianocomposer321/yabs.nvim), as the
+maintainer archived the repository. 99% of the work was done by them, thanks
+a lot for that.
 
-This inital goal of this fork was to had features that I wanted. However feel free to contribute as well for your liking!
+Features added by the fork:
+- Possibility to add `tags` to tasks (i.e. build, test). This makes it possible
+  to have unified keybinds for each tag.
 
 ## About
 
 yabs.nvim adds vscode-like tasks feature to neovim. It allows you to define specific commands that are associated with certain filetypes (or whole projects), as well as where the output for those commands should go, and execute them with a keybinding. For example, for a python file you could have a `run` task that runs `python3 %` in the terminal; for rust you could have a `build` task and a `run` task that executes `cargo build`, sending the output to the quickfix list, and `cargo run`, sending the output to the terminal, respectively; and for javascript, you could have a task to start the frontend server, one to start the backend server, and another one to run tests.
 
-## Roadmap
-
-- [ ] Configuration compatible with Lazy.
-- [ ] Add tags to tasks. Tags are a way to search for tasks, and allow for multiple "build" tasks per language.
-- [ ] Language-related tasks should not need a default_task.
-
 ## Installation
+
+[lazy.nvim](https://github.com/folke/lazy.nvim)
+
+```lua
+return {
+  "Seowlfh/yabs.nvim",
+  requires = { 'nvim-lua/plenary.nvim' }
+}
+```
 
 [packer.nvim](https://github.com/wbthomason/packer.nvim):
 
@@ -47,6 +54,9 @@ require('yabs'):setup({
           -- expanded)
           type = 'vim',  -- The type of command (can be `vim`, `lua`, or
           -- `shell`, default `shell`)
+          tag = 'run' -- Tag is a user-defined keyword used to retrieve tasks.
+          -- With this, you can defined one keybind for all "run" tasks for
+          -- instance.
         },
       },
     },
@@ -132,8 +142,9 @@ require('yabs'):setup({
 ```lua
 local yabs = require('yabs')
 
--- runs the task `build` for the current language, falling back to a global
--- task with that name if it is not found for the current language
+-- runs the task with the `build` tag, or the task with name 'build' for the
+-- current language if no tags are found, falling back to a global task with
+-- that name if it is not found for the current language
 yabs:run_task('build')
 
 -- runs the task that is specified as the default (see configuration section
